@@ -4,6 +4,7 @@
 const searchURL = "https://www.amiiboapi.com/api/";
 var amiiboArray = [];
 
+//to clean up names so they are id ready
 function idCleanUp(idName) {
   idName = idName.split(" ").join("").replace(/[^a-zA-Z ]/g, "");
   return idName;
@@ -60,6 +61,21 @@ function navigationButtonFunctions() {
 
 }
 
+//for reordering the amiibo showcase so the right ones appear in front
+function compare(a, b) {
+  const numberA = a.randomNumber;
+  const numberB = b.randomNumber;
+
+  let comparison = 0;
+  if (numberA > numberB) {
+    comparison = 1;
+  } else if (numberA < numberB) {
+    comparison = -1;
+  }
+  return comparison;
+}
+
+//Take every selected amiibo and showcase it
 function showCase() {
   $('#results').addClass('hidden');
   $('#category').addClass('hidden');
@@ -68,16 +84,18 @@ function showCase() {
   const showCaseArray = [];
   //I wanted to find the src from the img of the child of this but I couldn't figure out how
   $('.selected').each(function(index, element) {
-    showCaseArray.push($(element).val());
+    showCaseArray.push({image: $(element).val(), randomNumber: Math.random()});
   });
+
+  showCaseArray.sort(compare);
 
   $('#showcase').empty();
   $('#showcase').append(`<img src="images/showcase.jpg" class="showcase"/>`);
   for(let i=0;i<showCaseArray.length;i++) {
     $('#showcase').append(`
-  <img class="show amiiboImg" src="${showCaseArray[i]}" id="${i}">
+  <img class="show amiiboImg" src="${showCaseArray[i].image}" id="${i}">
   `)
-  $(`img#${i}`).css({'top': 430+(Math.random()*120), 'left': 80+(Math.random()*1040)});
+  $(`img#${i}`).css({'top': 430+(showCaseArray[i].randomNumber*120), 'left': 80+(Math.random()*1040)});
   };
 }
 
@@ -185,11 +203,6 @@ function homePage() {
     e.preventDefault();
     $('#home').addClass('hidden');
     renderAmiibos();
-  });
-
-  $('#js-upload-file').on('click', function(e) {
-    e.preventDefault();
-    console.log("Feature not implemented");
   });
 }
 
