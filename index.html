@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="home">
+      <h1>Amiibo Showcase</hi>
+      <p><button id="js-browse" type="button">Browse Amiibo Figures</button></p>
+      <p><button id="js-upload-file" type="button">Upload Saved Amiibos</button></p>
+    </div>
+
+    <section id="results-screen" class="hidden">
+    
+      <div id="options">
+        <button id="js-browse-gameseries" type="button">Browse by Game Series</button>
+        <button id="js-browse-all" type="button">Browse all</button>
+        <button id="js-showcase" type="button">Showcase</button>
+      </div>
+
+      <div id="category" class="hidden">
+      </div>
+
+      <div id="results">
+      </div>
+
+      <div id="showcase" class="hidden">
+        
+        <img src="https://raw.githubusercontent.com/N3evin/AmiiboAPI/master/images/icon_07820000-002f0002.png" class="show amiiboImg"/>
+      </div>
+    </section>
+
+    
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

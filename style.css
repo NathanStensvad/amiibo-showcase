@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+}
+
+div#home, div#options {
+  text-align: center;
+}
+
+img.amiiboImg {
+  height: 100px;
+}
+
+.selected {
+  background-color: green;
+}
+
+.hidden {
+  display: none;
+}
+
+.showcase {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.show {
+  position: absolute;
+  top: 430px;
+  left: 80px;
+  z-index: 2;
+}
