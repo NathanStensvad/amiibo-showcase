@@ -3,6 +3,7 @@
 /*I only want to implement figures as they look cooler than cards*/
 const searchURL = "https://www.amiiboapi.com/api/";
 var amiiboArray = [];
+const showCaseArray = [];
 
 //to clean up names so they are id ready
 function idCleanUp(idName) {
@@ -36,6 +37,10 @@ function navigationButtonFunctions() {
   //Top button
   $('#js-showcase').on('click',function(e) {
     e.preventDefault();
+    $('#results').addClass('hidden');
+    $('#category').addClass('hidden');
+    $('#options').addClass('hidden');
+    $('#showcase').removeClass('hidden');
     showCase();
   });
 
@@ -61,6 +66,46 @@ function navigationButtonFunctions() {
 
 }
 
+//Buttons for the showcase screen
+function showcaseButtons() {
+  $('#js-image-convert').on('click',function() {
+    convertToImage();
+  });
+  $('#js-go-back').on('click',function() {
+    $('#options').removeClass('hidden');
+    $('#showcase').addClass('hidden');
+    $('#results').addClass('hidden');
+  });
+}
+
+//Image converter for the showcase
+function convertToImage() {
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
+
+  canvas.width = img1.width;
+  canvas.height = img1.height;
+
+  context.globalAlpha = 1.0;
+  context.drawImage(img1, 0, 0);
+
+  for(let i=0; i<showCaseArray.length;i++) {
+    var img = document.getElementById("img" + (i+2));
+    context.drawImage(img, 80+(showCaseArray[i].randomNumberX*1040), 430+(showCaseArray[i].randomNumberY*120), 100 * img.width / img.height, 100);
+  }
+
+  //var img1 = document.getElementById('img1');
+  //var img2 = document.getElementById('img2');
+  //var img3 = document.getElementById('img3');
+  
+
+  
+
+  
+  //context.drawImage(img2, 834, 463, 100 * img2.width / img2.height, 100);
+  //context.drawImage(img3, 493, 533, 100 * img3.width / img3.height, 100);
+}
+
 //for reordering the amiibo showcase so the right ones appear in front
 function compare(a, b) {
   const numberA = a.randomNumber;
@@ -77,26 +122,33 @@ function compare(a, b) {
 
 //Take every selected amiibo and showcase it
 function showCase() {
-  $('#results').addClass('hidden');
-  $('#category').addClass('hidden');
-  $('#showcase').removeClass('hidden');
-
-  const showCaseArray = [];
   //I wanted to find the src from the img of the child of this but I couldn't figure out how
   $('.selected').each(function(index, element) {
-    showCaseArray.push({image: $(element).val(), randomNumber: Math.random()});
+    showCaseArray.push({image: $(element).val(), randomNumberY: Math.random(), randomNumberX: Math.random()});
   });
 
   showCaseArray.sort(compare);
 
   $('#showcase').empty();
-  $('#showcase').append(`<img src="images/showcase.jpg" class="showcase"/>`);
+  $('#showcase').append(`<img src="images/showcase.jpg" class="showcase" id="img1"/>`);
   for(let i=0;i<showCaseArray.length;i++) {
     $('#showcase').append(`
-  <img class="show amiiboImg" src="${showCaseArray[i].image}" id="${i}">
+  <img class="show amiiboImg" src="${showCaseArray[i].image}" id="img${i+2}">
   `)
-  $(`img#${i}`).css({'top': 430+(showCaseArray[i].randomNumber*120), 'left': 80+(Math.random()*1040)});
+  $(`img#img${i+2}`).css({'top': 430+(showCaseArray[i].randomNumberY*120), 'left': 80+(showCaseArray[i].randomNumberX*1040)});
   };
+
+  $('#showcase').append(`
+  <p>
+    <button type="button" id="js-go-back">Go Back</button>
+    <button type="button" id="js-image-convert">Convert to Image</button>
+  </p>
+  <canvas id="canvas"></canvas>
+  `)
+
+  showcaseButtons();
+  
+  
 }
 
 //Check to see if the game series has an amiibo before putting a button down.
