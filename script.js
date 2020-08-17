@@ -11,6 +11,18 @@ function idCleanUp(idName) {
   return idName;
 }
 
+function downloadImageButton() {
+  $('#js-download-showcase').remove();
+  $('#showcase-buttons').append(`<a href="#" class="button" id="js-download-showcase" download="Amiibo_ShowCase">Download Showcase</button>`);
+
+  var button = document.getElementById('js-download-showcase');
+
+  $('#js-download-showcase').on('click',function(e) {
+    console.log("downloading");
+    var dataURL = canvas.toDataURL('image/png');
+    button.href = dataURL;
+  });
+}
 //Button functions for the main amiibos navigation page
 function navigationButtonFunctions() {
   
@@ -69,19 +81,24 @@ function navigationButtonFunctions() {
 //Buttons for the showcase screen
 function showcaseButtons() {
   $('#js-image-convert').on('click',function() {
+    downloadImageButton();
     convertToImage();
   });
   $('#js-go-back').on('click',function() {
     $('#options').removeClass('hidden');
     $('#showcase').addClass('hidden');
-    $('#results').addClass('hidden');
+    $('#results').removeClass('hidden');
+  });
+
+  $('#js-reroll').on('click',function() {
+    showCase();
   });
 }
 
 //Image converter for the showcase
 function convertToImage() {
-  var canvas = document.getElementById('canvas');
-  var context = canvas.getContext('2d');
+  let canvas = document.getElementById('canvas');
+  let context = canvas.getContext('2d');
 
   canvas.width = img1.width;
   canvas.height = img1.height;
@@ -97,8 +114,8 @@ function convertToImage() {
 
 //for reordering the amiibo showcase so the right ones appear in front
 function compare(a, b) {
-  const numberA = a.randomNumber;
-  const numberB = b.randomNumber;
+  const numberA = a.randomNumberY;
+  const numberB = b.randomNumberY;
 
   let comparison = 0;
   if (numberA > numberB) {
@@ -118,19 +135,21 @@ function showCase() {
     showCaseArray.push({image: $(element).val(), randomNumberY: Math.random(), randomNumberX: Math.random()});
   });
 
+  console.log(showCaseArray);
   showCaseArray.sort(compare);
-
+console.log(showCaseArray);
   
   $('#showcase').append(`<img src="images/showcase.jpg" class="showcase" id="img1"/>`);
   for(let i=0;i<showCaseArray.length;i++) {
     $('#showcase').append(`
-  <img class="show amiiboImg" src="${showCaseArray[i].image}" id="img${i+2}">
+  <img class="show amiiboImg" src="${showCaseArray[i].image}" id="img${i+2}" crossorigin="anonymous">
   `);
   $(`img#img${i+2}`).css({'top': 430+(showCaseArray[i].randomNumberY*120), 'left': 80+(showCaseArray[i].randomNumberX*1040)});
   }
 
   $('#showcase').append(`
-  <p>
+  <p id="showcase-buttons">
+    <button type="button" id="js-reroll">Reroll Amiibo Placements</button>
     <button type="button" id="js-go-back">Go Back</button>
     <button type="button" id="js-image-convert">Convert to Image</button>
   </p>
@@ -198,7 +217,7 @@ function displayAmiibos(responseJson) {
   for(let i=0; i<responseJson.amiibo.length;i++) {
     $('#results').append(`
       <button type="button" class="js-amiibos" id="${responseJson.amiibo[i].gameSeries}" value="${responseJson.amiibo[i].image}">
-        <img class="amiiboImg" src="${responseJson.amiibo[i].image}" alt="${responseJson.amiibo[i].name}" value="imag">
+        <img class="amiiboImg" src="${responseJson.amiibo[i].image}" alt="${responseJson.amiibo[i].name}">
       </button>`
     );}
   getGameSeries();
