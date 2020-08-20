@@ -11,112 +11,31 @@ function idCleanUp(idName) {
   return idName;
 }
 
-//Button functions for the main amiibos navigation page
-function navigationButtonFunctions() {
-  
-  //Top button
-  $('#js-browse-gameseries').on('click',function(e) {
-    e.preventDefault();
-    $('#results').addClass('hidden');
-    $('#showcase').addClass('hidden');
-    $('#category').removeClass('hidden');
-  });
-
-  //Top button
-  $('#js-browse-all').on('click',function(e) {
-    e.preventDefault();
-    $('#category').addClass('hidden');
-    $('#showcase').addClass('hidden');
-    $('#results').removeClass('hidden');
-
-    $('button.js-amiibos').each(function() {
-      $(this).removeClass('hidden');
-    });
-  });
-
-  //Top button
-  $('#js-select-all').on('click',function(e) {
-    e.preventDefault();
-    $('#category').addClass('hidden');
-    $('#showcase').addClass('hidden');
-    $('#results').removeClass('hidden');
-    $('#results').addClass('results-flex');
-
-    if($('.js-amiibos').hasClass('selected')) {
-      if (window.confirm("Deselect all?")) {
-        $('button.js-amiibos').each(function() {
-        $(this).removeClass('selected');
-        });
-      }
-    }
-    else {
-      $('button.js-amiibos').each(function() {
-        $(this).addClass('selected');
-      });
-    }
-    
-    $('button.js-amiibos').each(function() {
-      $(this).removeClass('hidden');
-    });
-  });
-
-  //Top button
-  $('#js-showcase').on('click',function(e) {
-    e.preventDefault();
-    $('#results').addClass('hidden');
-    $('#results').removeClass('results-flex');
-    $('#category').addClass('hidden');
-    $('#options').addClass('hidden'); //why doesn't options work here? I had to make another container to get options to disappear.
-    $("#options-hide").addClass("hidden"); //dummy class cause idk how
-    $('#showcase').removeClass('hidden');
-    showCase();
-  });
-
-  //All the category buttons
-  $('.js-gameseries-buttons').on('click',function(e) {
-    e.preventDefault();
-    const buttonValue = $(this).val();
-    $('#category').addClass('hidden');
-    $('#results').removeClass('hidden');
-    $('#results').addClass('results-flex');
-    $('button.js-amiibos').each(function() {
-      $(this).addClass('hidden');
-    });
-    $(`button#${buttonValue}`).each(function() {
-      $(this).removeClass('hidden');
-    });
-  });
-
-  //All the amiibo buttons
-  $('.js-amiibos').on('click',function(e) {
-    e.preventDefault();
-    $(this).toggleClass('selected');
-  });
-
-}
-
 //Buttons for the showcase screen
 function showcaseButtons() {
-  $('#js-go-back').on('click',function() {
-    $('#options').removeClass('hidden');
+  $('#js-go-back').on('click', function () {
     $('#showcase').addClass('hidden');
     $('#results').removeClass('hidden');
+    //Bandaid fix for spacing out amiibos
     $('#results').addClass('results-flex');
+    //Bandaid fix for hiding options
     $("#options-hide").removeClass("hidden");
   });
 
-  $('#js-reroll').on('click',function() {
+  //This basically functions as the showcase button
+  $('#js-reroll').on('click', function () {
     showCase();
   });
 }
 
+//Download image button to download the canvas
 function downloadImageButton() {
   $('#js-download-showcase').remove();
   $('#download-button').append(`<a href="#" class="button" id="js-download-showcase" download="Amiibo_ShowCase"><img id="download" src="images/download.png" alt="Download"></a>`);
 
   var button = document.getElementById('js-download-showcase');
 
-  $('#js-download-showcase').on('click',function(e) {
+  $('#js-download-showcase').on('click', function (e) {
     console.log("downloading");
     var dataURL = canvas.toDataURL('image/png');
     button.href = dataURL;
@@ -132,15 +51,17 @@ function convertToImage() {
   canvas.height = img1.height;
 
   context.globalAlpha = 1.0;
+  //Draw the background image on the canvas
   context.drawImage(img1, 0, 0);
 
-  for(let i=0; i<showCaseArray.length;i++) {
-    var img = document.getElementById("img" + (i+2));
-    context.drawImage(img, 80+(showCaseArray[i].randomNumberX*1040), 430+(showCaseArray[i].randomNumberY*120), 100 * img.width / img.height, 100);
+  //Draw the amiibos on the canvas
+  for (let i = 0; i < showCaseArray.length; i++) {
+    var img = document.getElementById("img" + (i + 2));
+    context.drawImage(img, 80 + (showCaseArray[i].randomNumberX * 1040), 430 + (showCaseArray[i].randomNumberY * 120), 100 * img.width / img.height, 100);
   }
 }
 
-//for reordering the amiibo showcase so the right ones appear in front
+//for reordering the amiibo showcase so the lower height ones appear in front
 function compare(a, b) {
   const numberA = a.randomNumberY;
   const numberB = b.randomNumberY;
@@ -154,26 +75,30 @@ function compare(a, b) {
   return comparison;
 }
 
-
 //Take every selected amiibo and showcase it
 function showCase() {
-  //I wanted to find the src from the img of the child of this but I couldn't figure out how
-  $('#showcase').empty();
+  $('#showcase').empty(); //clear out the showcase for new showcase
   showCaseArray = [];
-  $('.selected').each(function(index, element) {
-    showCaseArray.push({image: $(element).children()[0].src, randomNumberY: Math.random(), randomNumberX: Math.random()});
+  //Make an array of selected amiibos that have random number placements.
+  $('.selected').each(function (index, element) {
+    showCaseArray.push({ image: $(element).children()[0].src, randomNumberY: Math.random(), randomNumberX: Math.random() });
   });
 
+  //Sort the array so the lower height ones are on top
   showCaseArray.sort(compare);
+
+  //This next part is sort of a failed experiment. I have hidden it because
+  //I found out that it's better to have them shown in a canvas. I still do 
+  //need this however because I use this to generate my canvas image
   
+  //Showcase Background
   $('#showcase').append(`<img src="images/showcase.jpg" class="showcase hidden" id="img1"/>`);
 
-  for(let i=0;i<showCaseArray.length;i++) {
+  //All the selected images
+  for (let i = 0; i < showCaseArray.length; i++) {
+    //Assign an id to each image so it can be used in the canvas generator
     $('#showcase').append(`
-  <img class="show amiiboImg hidden" src="${showCaseArray[i].image}" id="img${i+2}" crossorigin="anonymous">
-  `);
-
-  $(`img#img${i+2}`).css({'top': 530+(showCaseArray[i].randomNumberY*120), 'left': 80+(showCaseArray[i].randomNumberX*1040)});
+    <img class="show amiiboImg hidden" src="${showCaseArray[i].image}" id="img${i + 2}" crossorigin="anonymous">`);
   }
 
   $('#showcase').append(`
@@ -183,28 +108,118 @@ function showCase() {
   </p>
   <p id="download-button">
   </p>
-  <canvas id="canvas"></canvas>
+  <canvas id="canvas" width="1280" height="720"></canvas>
   `);
-  
-  //Copied this from https://stackoverflow.com/questions/11071314/javascript-execute-after-all-images-have-loaded to make my canvas load properly
-  var imgs = document.images,
-  len = imgs.length,
-  counter = 0;
 
-  [].forEach.call( imgs, function( img ) {
-    if(img.complete)
+  //https://stackoverflow.com/questions/11071314/javascript-execute-after-all-images-have-loaded
+  //My canvas wasn't loading the first time I hit showcase so I needed this for that
+
+  var imgs = document.images,
+    len = imgs.length,
+    counter = 0;
+
+  [].forEach.call(imgs, function (img) {
+    if (img.complete)
       incrementCounter();
     else
-      img.addEventListener( 'load', incrementCounter, false );
-} );
+      img.addEventListener('load', incrementCounter, false);
+  });
   function incrementCounter() {
     counter++;
-    if ( counter === len ) {
-      downloadImageButton();
+    if (counter === len) {
+      //The convertToImage is where the canvas happens
       convertToImage();
+      downloadImageButton();
       showcaseButtons();
     }
+  }
+
 }
+
+//Button functions for the main amiibos navigation page
+//Basically every button has a bunch of hidden class modifiers.
+function navigationButtonFunctions() {
+
+  //Top button
+  $('#js-browse-gameseries').on('click', function (e) {
+    e.preventDefault();
+    $('#results').addClass('hidden');
+    $('#showcase').addClass('hidden');
+    $('#category').removeClass('hidden');
+  });
+
+  //Top button
+  $('#js-browse-all').on('click', function (e) {
+    e.preventDefault();
+    $('#category').addClass('hidden');
+    $('#showcase').addClass('hidden');
+    $('#results').removeClass('hidden');
+    //This is to remove the hidden class from anything we searched through using game series
+    $('button.js-amiibos').each(function () {
+      $(this).removeClass('hidden');
+    });
+  });
+
+  //Top button Uses everything from the browse all button but more
+  $('#js-select-all').on('click', function (e) {
+    e.preventDefault();
+    $('#category').addClass('hidden');
+    $('#showcase').addClass('hidden');
+    $('#results').removeClass('hidden');
+
+    //check to see if there are any amiibos selected
+    if ($('.js-amiibos').hasClass('selected')) {
+      //Confirmation to deselect the selected
+      if (window.confirm("Deselect all?")) {
+        $('button.js-amiibos').each(function () {
+          $(this).removeClass('selected');
+        });
+      }
+    }
+    //This will select everything if none are selected
+    else {
+      $('button.js-amiibos').each(function () {
+        $(this).addClass('selected');
+      });
+    }
+
+    $('button.js-amiibos').removeClass('hidden');
+  });
+
+  //Top button
+  $('#js-showcase').on('click', function (e) {
+    e.preventDefault();
+    $('#results').addClass('hidden');
+    //Bandaid fix for spacing out amiibos
+    $('#results').removeClass('results-flex');
+    $('#category').addClass('hidden');
+    //Bandaid fix for hiding options
+    $("#options-hide").addClass("hidden");
+    $('#showcase').removeClass('hidden');
+    showCase();
+  });
+
+  //All the category buttons
+  $('.js-gameseries-buttons').on('click', function (e) {
+    e.preventDefault();
+    const buttonValue = $(this).val();
+    $('#category').addClass('hidden');
+    $('#results').removeClass('hidden');
+    //Bandaid fix for spacing out amiibos
+    $('#results').addClass('results-flex');
+    //Hide all the amiibos
+    $('button.js-amiibos').addClass('hidden');
+    //hide all the amiibos that don't have the gameseries name
+    $(`button#${buttonValue}`).each(function () {
+      $(this).removeClass('hidden');
+    });
+  });
+
+  //All the amiibo buttons
+  $('.js-amiibos').on('click', function (e) {
+    e.preventDefault();
+    $(this).toggleClass('selected');
+  });
 
 }
 
@@ -216,23 +231,21 @@ function checkForAmiibos(amiiboName) {
 
 //buttons for sorting amiibos
 function displayGameSeriesButtons(responseJson) {
-  //console.log(responseJson);
-
-  $('#category').empty();
+  //This div is to hide a flexbox which both use the display css
   $('#category').append(`<div id="category-group" class="group">`);
-  if(checkForAmiibos(responseJson.amiibo[0].name)) {
-    $('#category-group').append(`<button class="js-gameseries-buttons item" value="${idCleanUp(responseJson.amiibo[0].name)}" type="button" ">${responseJson.amiibo[0].name}</button>`);
-  }
-  for(let i=1; i<responseJson.amiibo.length;i++) {
+  //Because Super Mario is on top, we don't need to check if there are any new categories as mario will always be first
+  $('#category-group').append(`<button class="js-gameseries-buttons item" value="${idCleanUp(responseJson.amiibo[0].name)}" type="button">${responseJson.amiibo[0].name}</button>`);
+  
+  for (let i = 1; i < responseJson.amiibo.length; i++) {
     //Filter out multiple entries from original array
-    if(responseJson.amiibo[i-1].name !== responseJson.amiibo[i].name) {
+    if (responseJson.amiibo[i - 1].name !== responseJson.amiibo[i].name) {
       //Make sure there are amiibos for the game series button
-      if(checkForAmiibos(responseJson.amiibo[i].name)) {
+      if (checkForAmiibos(responseJson.amiibo[i].name)) {
         $('#category-group').append(`<button class="js-gameseries-buttons item" value="${idCleanUp(responseJson.amiibo[i].name)}" type="button">${responseJson.amiibo[i].name}</button>`);
       }
     }
   }
-  //Extra category for other entries.
+  //Extra category for other entries. Unused
   //$('#category-group').append(`<button class="js-gameseries-buttons item" value="Other" type="button">Other</button>`);
 
   $('#category').append(`</div>`);
@@ -240,7 +253,8 @@ function displayGameSeriesButtons(responseJson) {
   navigationButtonFunctions();
 }
 
-//Call to API to get game series buttons
+//Call to API to get game series buttons. In hindsight, I don't need this as I can
+//just call the first API and generate them from there.
 function getGameSeries() {
   const url = searchURL + "gameseries";
 
@@ -264,12 +278,14 @@ function displayAmiibos(responseJson) {
 
   $('#results').empty();
 
-  for(let i=0; i<responseJson.amiibo.length;i++) {
+  for (let i = 0; i < responseJson.amiibo.length; i++) {
     $('#results').append(`
       <button type="button" class="js-amiibos" id="${responseJson.amiibo[i].gameSeries}">
         <img class="amiiboImg" src="${responseJson.amiibo[i].image}" alt="${responseJson.amiibo[i].name}">
       </button>`
-    );}
+    );
+  }
+  //After the amiibos are rendered, render the game series button
   getGameSeries();
 }
 
@@ -278,7 +294,7 @@ function displayAmiibos(responseJson) {
 function saveAmiiboArray(responseJson) {
   amiiboArray = responseJson;
 
-  for(let i=0;i<responseJson.amiibo.length;i++) {
+  for (let i = 0; i < responseJson.amiibo.length; i++) {
     amiiboArray.amiibo[i].gameSeries = idCleanUp(responseJson.amiibo[i].gameSeries);
   }
 
@@ -287,10 +303,8 @@ function saveAmiiboArray(responseJson) {
 
 //Call to API to get amiibo list
 function getAPI() {
-  //const url = searchURL + "amiibo";
   const url = searchURL + "amiibo/?type=figure";
 
-  //console.log(url);
   fetch(url)
     .then(response => {
       if (response.ok) {
@@ -304,14 +318,14 @@ function getAPI() {
     });
 }
 
-//Calls to APIs and button functions
+//Call to first API
 function renderAmiibos() {
   $('#results-screen').removeClass('hidden');
   getAPI();
 }
 
 function homePage() {
-  $('#js-browse').on('click', function(e) {
+  $('#js-browse').on('click', function (e) {
     e.preventDefault();
     $('#home').addClass('hidden');
     $("html").css("background-image", "none");

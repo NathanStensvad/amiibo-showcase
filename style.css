@@ -4,6 +4,7 @@
   font-family: 'Quantico', sans-serif;
 }
 
+/*Background stuff*/
 html {
   background: url("images/home.png") no-repeat center center fixed;
   background-size: cover;
@@ -13,9 +14,17 @@ html {
   background-color: #00b2d3;
 }
 
-/*Title*/
+/*Title for Home*/
 h1 {
   font-size: 40px;
+}
+/*Sub Title for Home*/
+h2 {
+  font-size: 15px;
+}
+
+/*Stroke for titles*/
+h1, h2 {
   color: #e70013;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
@@ -26,29 +35,65 @@ p#download-button {
   align-content: center;
 }
 
+/*Shrink the download button*/
 #download {
   height: 100px;
 }
 
-/*size for all buttons*/
+/*size and styling for all buttons*/
 button {
   font-size: 20px;
+  background-color: #e70013;
+  color: white;
+  border-style: solid;
+  border-color:white;
+  border-width: 2px;
+  margin: 5px;
 }
 
-
+/*Put the canvas and download button in the center*/
 canvas, a {
   margin-left: auto;
   margin-right: auto;
   display: block;
 }
 
+/*To give the canvas a border*/
+canvas {
+  border-style: solid;
+  border-width: 5px;
+  border-color: #e70013;
+}
+
+/*Put the titles in the center of the screen*/
 #home {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
+  text-align: center;
 }
 
+/*Spacing from the top so the fixed buttons on top don't overlap*/
+#body {
+  margin-top: 100px;
+}
+
+/*Fixed buttons on top*/
+#options, #showcase-buttons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+/*Set the image height due to varied amiibo image sizes*/
+img.amiiboImg {
+  height: 100px;
+  margin: 5px;
+}
+
+/*Border and background for amiibos and game series buttons*/
 #results, #category-group {
   border-style: solid;
   border-color: red;
@@ -58,35 +103,15 @@ canvas, a {
   justify-content: center;
   flex-wrap: wrap;
   background-color: #00859c;
-}
-
-#results, #category-group {
   width: 75%;
 }
 
+/*spaces out the amiibos so they look nice*/
 .results-flex {
-  display: flex; /*why do i need another class for this to work?*/
+  display: flex;
 }
 
-#body {
-  margin-top: 100px;
-}
-#options, #showcase-buttons {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
-#home{
-  text-align: center;
-}
-
-img.amiiboImg {
-  height: 100px;
-  margin: 5px;
-}
-
+/*background for the amiibos themselves*/
 .js-amiibos {
   margin: 10px;
   border-style: solid;
@@ -95,36 +120,17 @@ img.amiiboImg {
   background-color: #0a009c;
 }
 
-.options, #js-browse, .js-gameseries-buttons, #js-go-back, #js-reroll {
-  background-color: #e70013;
-  color: white;
-  border-style: solid;
-  border-color:white;
-  border-width: 2px;
-  margin: 5px;
-}
-
+/*Mark for the selected amiibos*/
 .selected {
   background-color: #009c17;
 }
 
+/*To hide most of our loaded stuff*/
 .hidden {
   display: none;
 }
 
-.showcase {
-  position: relative;
-  top: 0;
-  left: 0;
-}
-
-.show {
-  position: absolute;
-  top: 430px;
-  left: 80px;
-  z-index: 2;
-}
-
+/*Flexbox stuff*/
 .group {
   display: flex;
   flex-direction: row;
@@ -135,14 +141,23 @@ img.amiiboImg {
   flex: 1;
 }
 
+/*Changes for smaller devices*/
 @media only screen and (min-width: 800px) {
   button {
     font-size: 30px;
   }
 
-  h1 {
-  font-size: 80px;
+  h1, h2 {
+  
   color: #e70013;
   text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  }
+
+  h1 {
+    font-size: 80px;
+  }
+
+  h2 {
+    font-size: 30px;
   }
 }
