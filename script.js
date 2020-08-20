@@ -90,7 +90,7 @@ function showCase() {
   //This next part is sort of a failed experiment. I have hidden it because
   //I found out that it's better to have them shown in a canvas. I still do 
   //need this however because I use this to generate my canvas image
-  
+
   //Showcase Background
   $('#showcase').append(`<img src="images/showcase.jpg" class="showcase hidden" id="img1"/>`);
 
@@ -146,6 +146,8 @@ function navigationButtonFunctions() {
     $('#results').addClass('hidden');
     $('#showcase').addClass('hidden');
     $('#category').removeClass('hidden');
+    //Labelling for select all button
+    $('.js-amiibos').removeClass('shown');
   });
 
   //Top button
@@ -160,30 +162,45 @@ function navigationButtonFunctions() {
     });
   });
 
-  //Top button Uses everything from the browse all button but more
+  //select all and deselect all depending on category
   $('#js-select-all').on('click', function (e) {
     e.preventDefault();
-    $('#category').addClass('hidden');
-    $('#showcase').addClass('hidden');
-    $('#results').removeClass('hidden');
 
-    //check to see if there are any amiibos selected
-    if ($('.js-amiibos').hasClass('selected')) {
-      //Confirmation to deselect the selected
+    //Check if there are any amiibos on screen
+    if(!$('.js-amiibos').hasClass('shown')) {
+      alert("Try looking at some amiibos");
+    }
+    
+    //Check if user is on select all screen and has any selected
+    if(!$('.js-amiibos').hasClass('hidden') && $('.js-amiibos').hasClass('selected')) {
       if (window.confirm("Deselect all?")) {
-        $('button.js-amiibos').each(function () {
+        $('.js-amiibos').each(function () {
           $(this).removeClass('selected');
         });
       }
     }
-    //This will select everything if none are selected
-    else {
-      $('button.js-amiibos').each(function () {
-        $(this).addClass('selected');
+
+    //Check if user is on select all screen and has none selected
+    else if(!$('.js-amiibos').hasClass('hidden') && !$('.js-amiibos').hasClass('selected')) {
+      $('.js-amiibos').each(function () {
+          $(this).addClass('selected');
       });
     }
 
-    $('button.js-amiibos').removeClass('hidden');
+    //Check if user is on a game series screen and has any selected
+    else {
+      if($('.js-amiibos.shown').hasClass('selected')) {
+        if (window.confirm("Deselect all from game series?")) {
+          $('.js-amiibos.shown').each(function () {
+            $(this).removeClass('selected');
+          });
+        }
+      }
+      //Game series screen and has none selected
+      else {
+        $('.js-amiibos.shown').addClass('selected');
+      }
+    }
   });
 
   //Top button
@@ -208,10 +225,12 @@ function navigationButtonFunctions() {
     //Bandaid fix for spacing out amiibos
     $('#results').addClass('results-flex');
     //Hide all the amiibos
-    $('button.js-amiibos').addClass('hidden');
+    $('.js-amiibos').addClass('hidden');
     //hide all the amiibos that don't have the gameseries name
     $(`button#${buttonValue}`).each(function () {
       $(this).removeClass('hidden');
+      //Labelling for select all button
+      $(this).addClass('shown');
     });
   });
 
@@ -235,7 +254,7 @@ function displayGameSeriesButtons(responseJson) {
   $('#category').append(`<div id="category-group" class="group">`);
   //Because Super Mario is on top, we don't need to check if there are any new categories as mario will always be first
   $('#category-group').append(`<button class="js-gameseries-buttons item" value="${idCleanUp(responseJson.amiibo[0].name)}" type="button">${responseJson.amiibo[0].name}</button>`);
-  
+
   for (let i = 1; i < responseJson.amiibo.length; i++) {
     //Filter out multiple entries from original array
     if (responseJson.amiibo[i - 1].name !== responseJson.amiibo[i].name) {
@@ -280,7 +299,7 @@ function displayAmiibos(responseJson) {
 
   for (let i = 0; i < responseJson.amiibo.length; i++) {
     $('#results').append(`
-      <button type="button" class="js-amiibos" id="${responseJson.amiibo[i].gameSeries}">
+      <button type="button" class="js-amiibos shown" id="${responseJson.amiibo[i].gameSeries}">
         <img class="amiiboImg" src="${responseJson.amiibo[i].image}" alt="${responseJson.amiibo[i].name}">
       </button>`
     );
