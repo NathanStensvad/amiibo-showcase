@@ -1,17 +1,111 @@
-* {
+*{
   margin: 0;
+  padding: 0;
+  font-family: 'Quantico', sans-serif;
 }
 
-div#home, div#options {
+html {
+  background: url("images/home.png") no-repeat center center fixed;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-color: #00b2d3;
+}
+
+/*Title*/
+h1 {
+  font-size: 40px;
+  color: #e70013;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+/*To center the download button*/
+p#download-button {
+  display: flex;
+  align-content: center;
+}
+
+#download {
+  height: 100px;
+}
+
+/*size for all buttons*/
+button {
+  font-size: 20px;
+}
+
+
+canvas, a {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+#home {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+#results, #category-group {
+  border-style: solid;
+  border-color: red;
+  border-width: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: #00859c;
+}
+
+#results, #category-group {
+  width: 75%;
+}
+
+.results-flex {
+  display: flex; /*why do i need another class for this to work?*/
+}
+
+#body {
+  margin-top: 100px;
+}
+#options, #showcase-buttons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+#home{
   text-align: center;
 }
 
 img.amiiboImg {
   height: 100px;
+  margin: 5px;
+}
+
+.js-amiibos {
+  margin: 10px;
+  border-style: solid;
+  border-color: #e70013;
+  border-width: 2px;
+  background-color: #0a009c;
+}
+
+.options, #js-browse, .js-gameseries-buttons, #js-go-back, #js-reroll {
+  background-color: #e70013;
+  color: white;
+  border-style: solid;
+  border-color:white;
+  border-width: 2px;
+  margin: 5px;
 }
 
 .selected {
-  background-color: green;
+  background-color: #009c17;
 }
 
 .hidden {
@@ -29,4 +123,26 @@ img.amiiboImg {
   top: 430px;
   left: 80px;
   z-index: 2;
+}
+
+.group {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+}
+
+.item {
+  flex: 1;
+}
+
+@media only screen and (min-width: 800px) {
+  button {
+    font-size: 30px;
+  }
+
+  h1 {
+  font-size: 80px;
+  color: #e70013;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  }
 }

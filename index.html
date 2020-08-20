@@ -1,38 +1,43 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Amiibo Showcase</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <div id="home">
-      <h1>Amiibo Showcase</hi>
-      <p><button id="js-browse" type="button">Browse Amiibo Figures</button></p>
-    </div>
+<html lang="en">
 
-    <section id="results-screen" class="hidden">
-    
-      <div id="options">
-        <button id="js-browse-gameseries" type="button">Browse by Game Series</button>
-        <button id="js-browse-all" type="button">Browse all</button>
-        <button id="js-showcase" type="button">Showcase</button>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Amiibo Showcase</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quantico:wght@700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="home">
+    <h1>Amiibo Showcase</h1>
+    <br>
+    <button id="js-browse" type="button">Browse Amiibo Figures</button>
+  </div>
+
+  <section id="results-screen" class="hidden">
+    <div id="options-hide">
+      <div id="options" class="group">
+        <button id="js-browse-gameseries" class="item options" type="button">Browse by Game Series</button>
+        <button id="js-browse-all" class="item options" type="button">Browse all</button>
+        <button id="js-select-all" class="item options" type="button">Select all</button>
+        <button id="js-showcase" class="item options" type="button">Showcase →</button>
       </div>
-
+    </div>
+    <section id="body">
       <div id="category" class="hidden">
       </div>
-
-      <div id="results">
+      
+      <div id="results" class="results-flex">
       </div>
 
       <div id="showcase" class="hidden">
       </div>
     </section>
+  </section>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="script.js"></script>
+</body>
 
-    
-
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="script.js"></script>
-  </body>
 </html>
