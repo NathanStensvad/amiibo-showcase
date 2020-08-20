@@ -12,7 +12,6 @@ html {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-color: #00b2d3;
-  filter: invert(1);
 }
 
 /*Title for Home*/
