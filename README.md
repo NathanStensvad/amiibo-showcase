@@ -4,7 +4,7 @@ The Amiibo Showcase pulls every figure amiibo from the API and puts it in a down
 
 <img src="https://github.com/NathanStensvad/amiibo-showcase/blob/master/images/home.png">
 
-Test it<a href="https://nathanstensvad.github.io/amiibo-showcase/">here</a>.
+Test it <a href="https://nathanstensvad.github.io/amiibo-showcase/">here</a>.
 
 ## Features
 
